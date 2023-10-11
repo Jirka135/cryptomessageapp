@@ -10,7 +10,7 @@ salt = b'&\xf9\x19\xa32`\x81\xc6\xf0\xcb\xab^\xc2\x87\x8c\xc7\xe9\x84\x82z\xd5\x
 
 key = PBKDF2(password, salt, dkLen=32, count=100000, prf=lambda p, s: hashlib.sha256(p + s).digest())
 
-message = "tak co ti je"
+message = "mira je gej"
 
 cipher = AES.new(key, AES.MODE_CBC)
 ciphertext = cipher.encrypt(pad(message.encode(), AES.block_size))

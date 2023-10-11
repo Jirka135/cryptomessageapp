@@ -1,13 +1,14 @@
 import psycopg2
+import secret
 
 # Database configuration
 db_config = {
-    "dbname": "tablename",
-    "user": "jirka",
-    "password": 'Diplom10*',
-    "host": "127.0.0.1",  
-    "port": "3306",
-    "sslmode":"disable"      
+    "dbname": secret.dbname,
+    "user": secret.user,
+    "password": secret.heslo,
+    "host": secret.host,  
+    "port": secret.port,
+    "sslmode":"prefer"  
 }
 
 connection = None
