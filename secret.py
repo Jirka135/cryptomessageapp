@@ -1,5 +1,0 @@
-dbname = "messageapp"
-user = "jirka"
-heslo = "Diplom10*"
-host = "10.0.0.5"  
-port = "5432"
