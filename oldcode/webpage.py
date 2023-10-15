@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for,Blueprint
+from flask import Flask, render_template, request, redirect, url_for,Blueprint,jsonify
 
 webpage = Blueprint("webpage", __name__)
 
@@ -8,14 +8,14 @@ def home():
 
 @webpage.route("/login", methods=['GET','POST'])
 def login(status = None):
-    username = request.form.get('username')
-    password = request.form.get('password')
-
+    user_login = {
+        "jmeno":request.form.get('username'),
+        "hashedpassword":request.form.get('password')
+    }
+    jsonify(user_login),200
+    status = ""
     # Process the form data, e.g., implement authentication logic
-    if username == 'admin' and password == 'admin':
-        status = "Login successful"
-    else:
-        status = "Invalid username or password"
+   
 
     return render_template('login.html', status=status)
 
