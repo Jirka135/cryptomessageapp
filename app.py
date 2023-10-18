@@ -1,6 +1,8 @@
 import create_salt
 import tkinter
 import customtkinter
+from my_sqlalchemy import session,User
+import bcrypt
 
 # sul = create_salt.generate_salt()
 # print(sul)
@@ -13,10 +15,9 @@ def clear_ui():
     for widget in UI_main.winfo_children():
         widget.destroy()
 
-def switch_to_register_page():
+#def user_exists(username):
 
-    def create_account():
-        print("account created")
+def switch_to_register_page():
 
     clear_ui()
     title()
@@ -37,8 +38,15 @@ def switch_to_register_page():
     email_input.grid(row=1, column=1, padx=5, pady=5)
     password_input.grid(row=2, column=1, padx=5, pady=5)
 
-    create_account_button = customtkinter.CTkButton(main_UI_frame, text="Create Account", command=create_account)
+    username = username_input.get().encode('utf-8')
+    email = password_input.get().encode('utf-8')
+    password = email_input.get().encode('utf-8')
+    salt = bcrypt.gensalt()
+
+
+    create_account_button = customtkinter.CTkButton(main_UI_frame, text="Create Account", command=create_account(username,email,password,salt))
     create_account_button.grid(row=3, columnspan=2, padx=5, pady=10)
+
 
 
 def login_page():
@@ -68,6 +76,25 @@ def login_page():
     register_button = customtkinter.CTkButton(UI_main, text="Create Account", command=switch_to_register_page)
     register_button.pack(padx=20, pady=10,side="bottom",anchor="sw")
 
+def create_account(username,email,password,salt):
+
+    hashed_username = bcrypt.hashpw(username,salt)
+    hashed_email = bcrypt.hashpw(email,salt)
+    hashed_password = bcrypt.hashpw(password,salt)
+    new_user = User(username=hashed_username, email=hashed_email, password=hashed_password,salt=salt)
+    session.add(new_user)
+    session.commit()
+
+def print_users():
+    users = session.query(User).all()
+
+    for user in users:
+        print(f"User ID: {user.id}, Username: {user.username}, Email: {user.email}")
+
+def delete_account(to_remove):
+    users_to_remove = session.query(User).filter(User.id.in_(to_remove))
+    users_to_remove.delete(synchronize_session=False)
+    session.commit()
 
 # UI
 customtkinter.set_appearance_mode("Dark")
@@ -78,5 +105,9 @@ UI_main.geometry("520x720")
 UI_main.title("CryptoMessage")
 
 
+#create_account(username,email,password,salt)
+
+print_users()
+session.close()
 login_page()
 UI_main.mainloop()
