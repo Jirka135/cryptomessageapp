@@ -36,10 +36,13 @@ def check_login(username,password,login_status_text):
         
 
     
-def print_users():
-    users = session.query(User).all()
-    for user in users:
-        ic(user)
+def get_usernames():
+    users = session.query(User.username).all()
+    return [user[0] for user in users]
+
+def get_emails():
+    emails = session.query(User.email).all()
+    return [email[0] for email in emails]
 
 def delete_account(to_remove):
     users_to_remove = session.query(User).filter(User.id.in_(to_remove))
@@ -56,4 +59,3 @@ def check_username_in_database(username):
 #delete_account([1,2,3,4,5,6,7,8,9])
 #create_account(username="jirka",email="nnheo@example.com",password="jirkajebest")
 #check_login("pepa", "password")
-#print_users()
