@@ -147,31 +147,31 @@ def kontrola_síly_hesla(heslo,register_status_text):
         ic(elapsed_time_ms)
         register_status_text.configure(text=f"Password is strong")
         return True
-    elif (pocet_velkych_pismen > 2):
+    elif (pocet_velkych_pismen < 1):
         register_status_text.configure(text=f"You dont have 1 or more uppercase letters") 
         end_time = time.time()
         elapsed_time_ms = (end_time - start_time) * 1000
         ic(elapsed_time_ms) 
         return False
-    elif (pocet_specifickych_znaku >= 1 ):
+    elif (pocet_specifickych_znaku < 1 ):
         register_status_text.configure(text=f"you dont have 1 or more special characters")  
         end_time = time.time()
         elapsed_time_ms = (end_time - start_time) * 1000
         ic(elapsed_time_ms)
         return False
-    elif (pocet_malych_pismen >= 1):
+    elif (pocet_malych_pismen <1):
         register_status_text.configure(text=f"you dont have 1 or more lowercase characters")  
         end_time = time.time()
         elapsed_time_ms = (end_time - start_time) * 1000
         ic(elapsed_time_ms)
         return False
-    elif (pocet_malych_pismen >= 1):
+    elif (pocet_malych_pismen < 1):
         register_status_text.configure(text=f"you dont have 1 or more numbers")  
         end_time = time.time()
         elapsed_time_ms = (end_time - start_time) * 1000
         ic(elapsed_time_ms)
         return False
-    elif (pocet_malych_pismen >= 1):
+    elif (pocet_malych_pismen < 1):
         register_status_text.configure(text=f"you dont have 12 charcter long password")    
         end_time = time.time()
         elapsed_time_ms = (end_time - start_time) * 1000
