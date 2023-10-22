@@ -45,8 +45,7 @@ def download_file(url, file_name):
 github_raw_url = "https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Common-Credentials/10-million-password-list-top-1000000.txt"
 local_file_name = "password_list.txt"
 
-def check_password_strength(password,register_status_text):
-
+def check_password_strength(password, register_status_text):
     if not os.path.exists(local_file_name):
         download_file(github_raw_url, local_file_name)
 
@@ -56,129 +55,86 @@ def check_password_strength(password,register_status_text):
     min_uppercase_letters = 1
     min_special_characters = 1
     special_characters_list = set(string.punctuation)
-    #print(f"Checking password {password}")
     
-    # Character counting
     number_of_uppercase = sum(1 for character in password if character.isupper())
     number_of_numbers = sum(1 for character in password if character.isdigit())
     number_of_special_characters = sum(1 for character in password if character in special_characters_list)
 
     if not password:
-        return register_status_text.configure(text=f"Password cannot be empty") and False
+        return register_status_text.configure(text="Password cannot be empty") and False
 
-    # Wordlist checking
     with open(local_file_name, "r") as file:
         for line in file:
             if password in line:
-                register_status_text.configure(text=f"Password is in the wordlist")
-                end_time = time.time()
-                elapsed_time_ms = (end_time - start_time) * 1000
-                ic(elapsed_time_ms)
+                register_status_text.configure(text="Password is in the wordlist")
                 return False
     
-    # Space checking
     if ' ' in password:
-        register_status_text.configure(text=f"Password contains spaces")
-        end_time = time.time()
-        elapsed_time_ms = (end_time - start_time) * 1000
-        ic(elapsed_time_ms)
+        register_status_text.configure(text="Password contains spaces")
         return False
     
-    # Length checking
     elif len(password) < min_password_length:
         register_status_text.configure(text=f"Password is too short, Min {min_password_length}")
-        end_time = time.time()
-        elapsed_time_ms = (end_time - start_time) * 1000
-        ic(elapsed_time_ms)
         return False
     
-    # Uppercase checking
     elif number_of_uppercase < min_uppercase_letters:
         register_status_text.configure(text=f"Min uppercase {min_uppercase_letters}")
-        end_time = time.time()
-        elapsed_time_ms = (end_time - start_time) * 1000
-        ic(elapsed_time_ms) 
         return False
     elif number_of_uppercase == len(password) - number_of_numbers:
-        register_status_text.configure(text=f"Min lowercase 1")
-        end_time = time.time()
-        elapsed_time_ms = (end_time - start_time) * 1000
-        ic(elapsed_time_ms)
+        register_status_text.configure(text="Min lowercase 1")
         return False
     elif number_of_special_characters < min_special_characters:
-        end_time = time.time()
-        elapsed_time_ms = (end_time - start_time) * 1000
-        ic(elapsed_time_ms)
         register_status_text.configure(text=f"Min special characters {min_special_characters}")
         return False
     else:
-        end_time = time.time()
-        elapsed_time_ms = (end_time - start_time) * 1000
-        register_status_text.configure(text=f"Password is strong")
+        register_status_text.configure(text="Password is strong")
         return True
 
-def kontrola_síly_hesla(heslo,register_status_text):
-    pocet_velkych_pismen = 0
-    pocet_specifickych_znaku = 0
-    pocet_malych_pismen = 0
-    pocet_cisel = 0
-    start_time = time.time()
-    ic(heslo)
+def check_password_strength_karel(password, register_status_text):
+    num_uppercase_letters = len(re.findall(r'[A-Z]', password))
+    num_special_characters = len(re.findall(r'[!@#$%^&*(),.?":{}|<>]', password))
+    num_lowercase_letters = len(re.findall(r'[a-z]', password))
+    num_numbers = len(re.findall(r'\d', password))
+
     with open(local_file_name, "r") as file:
         for line in file:
-            if heslo in line:
-                return register_status_text.configure(text=f"Password in wordlist") and False
+            if password in line:
+                return register_status_text.configure(text="Password in wordlist") and False
             
-    for znak in heslo:
-        if znak.isupper():
-            pocet_velkych_pismen += 1
-        for special in znak:
-            if special in string.punctuation:
-                pocet_specifickych_znaku += 1
-        if znak.islower():
-            pocet_malych_pismen += 1
-        for character in znak:
-            if character in string.digits:
-                pocet_cisel += 1
+    for character in password:
+        if character.isupper():
+            num_uppercase_letters += 1
+        if character.ispunct():
+            num_special_characters += 1
+        if character.islower():
+            num_lowercase_letters += 1
+        if character.isdigit():
+            num_numbers += 1
 
-    if (pocet_velkych_pismen >= 1 and pocet_specifickych_znaku >= 1 and pocet_malych_pismen >= 1 and pocet_cisel >= 1 and len(heslo) >= 12):
-        end_time = time.time()
-        elapsed_time_ms = (end_time - start_time) * 1000
-        ic(elapsed_time_ms)
-        register_status_text.configure(text=f"Password is strong")
+    if not password:
+        register_status_text.configure(text="Password cannot be empty")
         return True
-    elif (pocet_velkych_pismen < 1):
-        register_status_text.configure(text=f"You dont have 1 or more uppercase letters") 
-        end_time = time.time()
-        elapsed_time_ms = (end_time - start_time) * 1000
-        ic(elapsed_time_ms) 
+    elif (num_uppercase_letters >= 1 and num_special_characters >= 1 and num_lowercase_letters >= 1
+          and num_numbers >= 1 and len(password) >= 12):
+        register_status_text.configure(text="Password is strong")
+        return True
+    elif (num_uppercase_letters < 1):
+        register_status_text.configure(text="You don't have 1 or more uppercase letters") 
         return False
-    elif (pocet_specifickych_znaku < 1 ):
-        register_status_text.configure(text=f"you dont have 1 or more special characters")  
-        end_time = time.time()
-        elapsed_time_ms = (end_time - start_time) * 1000
-        ic(elapsed_time_ms)
+    elif (num_special_characters < 1 ):
+        register_status_text.configure(text="You don't have 1 or more special characters")  
         return False
-    elif (pocet_malych_pismen <1):
-        register_status_text.configure(text=f"you dont have 1 or more lowercase characters")  
-        end_time = time.time()
-        elapsed_time_ms = (end_time - start_time) * 1000
-        ic(elapsed_time_ms)
+    elif (num_lowercase_letters < 1):
+        register_status_text.configure(text="You don't have 1 or more lowercase characters")  
         return False
-    elif (pocet_malych_pismen < 1):
-        register_status_text.configure(text=f"you dont have 1 or more numbers")  
-        end_time = time.time()
-        elapsed_time_ms = (end_time - start_time) * 1000
-        ic(elapsed_time_ms)
+    elif (num_numbers < 1):
+        register_status_text.configure(text="You don't have 1 or more numbers")  
         return False
-    elif (pocet_malych_pismen < 1):
-        register_status_text.configure(text=f"you dont have 12 charcter long password")    
-        end_time = time.time()
-        elapsed_time_ms = (end_time - start_time) * 1000
-        ic(elapsed_time_ms)
+    elif (len(password) < 12):
+        register_status_text.configure(text="Your password is less than 12 characters long")
         return False
     else:
-        register_status_text.configure(text=f"Unexpected error")
+        register_status_text.configure(text="Unexpected error")
         return False
 
 if __name__ == "__main__":
@@ -189,6 +145,6 @@ if __name__ == "__main__":
     username_input = customtkinter.CTkEntry(UI, width=300, corner_radius=10)
     status_text.pack(side="top", fill="both", expand=True)
     username_input.pack(side="top", fill="both", expand=True)
-    UI.bind('<Return>', lambda event: kontrola_síly_hesla(username_input.get(), status_text))
+    UI.bind('<Return>', lambda event: check_password_strength_karel(username_input.get(), status_text))
     UI.mainloop()
 
