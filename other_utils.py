@@ -71,35 +71,115 @@ def check_password_strength(password,register_status_text):
         for line in file:
             if password in line:
                 register_status_text.configure(text=f"Password is in the wordlist")
+                end_time = time.time()
+                elapsed_time_ms = (end_time - start_time) * 1000
+                ic(elapsed_time_ms)
                 return False
     
     # Space checking
     if ' ' in password:
         register_status_text.configure(text=f"Password contains spaces")
+        end_time = time.time()
+        elapsed_time_ms = (end_time - start_time) * 1000
+        ic(elapsed_time_ms)
         return False
     
     # Length checking
     elif len(password) < min_password_length:
         register_status_text.configure(text=f"Password is too short, Min {min_password_length}")
+        end_time = time.time()
+        elapsed_time_ms = (end_time - start_time) * 1000
+        ic(elapsed_time_ms)
         return False
     
     # Uppercase checking
     elif number_of_uppercase < min_uppercase_letters:
-        register_status_text.configure(text=f"Min uppercase {min_uppercase_letters}") 
+        register_status_text.configure(text=f"Min uppercase {min_uppercase_letters}")
+        end_time = time.time()
+        elapsed_time_ms = (end_time - start_time) * 1000
+        ic(elapsed_time_ms) 
         return False
     elif number_of_uppercase == len(password) - number_of_numbers:
         register_status_text.configure(text=f"Min lowercase 1")
+        end_time = time.time()
+        elapsed_time_ms = (end_time - start_time) * 1000
+        ic(elapsed_time_ms)
         return False
     elif number_of_special_characters < min_special_characters:
+        end_time = time.time()
+        elapsed_time_ms = (end_time - start_time) * 1000
+        ic(elapsed_time_ms)
         register_status_text.configure(text=f"Min special characters {min_special_characters}")
         return False
     else:
-
         end_time = time.time()
         elapsed_time_ms = (end_time - start_time) * 1000
-        register_status_text.configure(text=f"Password is strong (Execution time: {elapsed_time_ms:.2f} ms)")
-
+        register_status_text.configure(text=f"Password is strong")
         return True
+
+def kontrola_síly_hesla(heslo,register_status_text):
+    pocet_velkych_pismen = 0
+    pocet_specifickych_znaku = 0
+    pocet_malych_pismen = 0
+    pocet_cisel = 0
+    start_time = time.time()
+    ic(heslo)
+    with open(local_file_name, "r") as file:
+        for line in file:
+            if heslo in line:
+                return register_status_text.configure(text=f"Password in wordlist") and False
+            
+    for znak in heslo:
+        if znak.isupper():
+            pocet_velkych_pismen += 1
+        for special in znak:
+            if special in string.punctuation:
+                pocet_specifickych_znaku += 1
+        if znak.islower():
+            pocet_malych_pismen += 1
+        for character in znak:
+            if character in string.digits:
+                pocet_cisel += 1
+
+    if (pocet_velkych_pismen >= 1 and pocet_specifickych_znaku >= 1 and pocet_malych_pismen >= 1 and pocet_cisel >= 1 and len(heslo) >= 12):
+        end_time = time.time()
+        elapsed_time_ms = (end_time - start_time) * 1000
+        ic(elapsed_time_ms)
+        register_status_text.configure(text=f"Password is strong")
+        return True
+    elif (pocet_velkych_pismen > 2):
+        register_status_text.configure(text=f"You dont have 1 or more uppercase letters") 
+        end_time = time.time()
+        elapsed_time_ms = (end_time - start_time) * 1000
+        ic(elapsed_time_ms) 
+        return False
+    elif (pocet_specifickych_znaku >= 1 ):
+        register_status_text.configure(text=f"you dont have 1 or more special characters")  
+        end_time = time.time()
+        elapsed_time_ms = (end_time - start_time) * 1000
+        ic(elapsed_time_ms)
+        return False
+    elif (pocet_malych_pismen >= 1):
+        register_status_text.configure(text=f"you dont have 1 or more lowercase characters")  
+        end_time = time.time()
+        elapsed_time_ms = (end_time - start_time) * 1000
+        ic(elapsed_time_ms)
+        return False
+    elif (pocet_malych_pismen >= 1):
+        register_status_text.configure(text=f"you dont have 1 or more numbers")  
+        end_time = time.time()
+        elapsed_time_ms = (end_time - start_time) * 1000
+        ic(elapsed_time_ms)
+        return False
+    elif (pocet_malych_pismen >= 1):
+        register_status_text.configure(text=f"you dont have 12 charcter long password")    
+        end_time = time.time()
+        elapsed_time_ms = (end_time - start_time) * 1000
+        ic(elapsed_time_ms)
+        return False
+    else:
+        register_status_text.configure(text=f"Unexpected error")
+        return False
 
 if __name__ == "__main__":
     UI = customtkinter.CTk()
@@ -109,6 +189,6 @@ if __name__ == "__main__":
     username_input = customtkinter.CTkEntry(UI, width=300, corner_radius=10)
     status_text.pack(side="top", fill="both", expand=True)
     username_input.pack(side="top", fill="both", expand=True)
-    UI.bind('<Return>', lambda event: check_password_strength(username_input.get(), status_text))
+    UI.bind('<Return>', lambda event: kontrola_síly_hesla(username_input.get(), status_text))
     UI.mainloop()
 
