@@ -1,0 +1,29 @@
+import secrets
+import string
+from my_sqlalchemy import session,User
+from icecream import ic
+import bcrypt
+from create_salt import generate_salt
+
+def generate_username():
+    return ''.join(secrets.choice(string.ascii_lowercase + string.digits) for _ in range(8))
+
+def generate_password():
+    return ''.join(secrets.choice(string.ascii_letters + string.digits + string.punctuation) for _ in range(12))
+
+def fill_database_with_training_data(num_entries):
+    for _ in range(num_entries):
+        salt = generate_salt()
+        username = generate_username()
+        email = f"user{_}@example.com"
+        password = generate_password()
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+
+        new_user = User(username=username, email=email, password=hashed_password,salt=salt)
+        session.add(new_user)
+        session.commit()
+
+# Call the function with the desired number of entries
+fill_database_with_training_data(10)
+
+

@@ -40,7 +40,7 @@ def register_page(UI_main):
         password = password_input.get()
         register_status_text.configure(text="")
         if len(password) > 5:
-            is_valid_username(password,register_status_text)
+            check_password_strength(password,register_status_text)
 
     def check_username():
         username = username_input.get()
@@ -48,18 +48,25 @@ def register_page(UI_main):
         if len(username) > 5:
             is_valid_username(username,register_status_text)
 
+    def check_email():
+        email = email_input.get()
+        register_status_text.configure(text="")
+        if len(email) > 5:
+            is_valid_email(email,register_status_text)
+
     def create_account_UI():
         register_status_text.configure(text="")
         username = username_input.get()
         email = email_input.get()
         password = password_input.get()
         can_create_account = True
+        register_status_text.configure(text=can_create_account)
         if not is_valid_username(username,register_status_text):
-            can_create_account = False
+            not can_create_account
         elif not is_valid_email(email,register_status_text):
-            can_create_account = False
+            not can_create_account
         elif not check_password_strength(password,register_status_text):
-            can_create_account = False
+            not can_create_account
         elif can_create_account:
             create_account_in_db(username, email, password)
             register_status_text.configure(text="Account created successfully")
@@ -68,6 +75,7 @@ def register_page(UI_main):
     
     username_input.bind("<KeyRelease>", lambda event: check_username())
     password_input.bind("<KeyRelease>", lambda event: check_password())
+    email_input.bind("<KeyRelease>", lambda event: check_email())
 
     create_account_button = customtkinter.CTkButton(main_UI_frame, text="Create Account", command= lambda : create_account_UI())
     create_account_button.grid(row=4, columnspan=2, padx=5, pady=10)
