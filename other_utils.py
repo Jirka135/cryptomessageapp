@@ -49,8 +49,6 @@ def check_password_strength(password, register_status_text):
     if not os.path.exists(local_file_name):
         download_file(github_raw_url, local_file_name)
 
-    start_time = time.time()
-
     min_password_length = 12
     min_uppercase_letters = 1
     min_special_characters = 1
@@ -91,11 +89,13 @@ def check_password_strength(password, register_status_text):
         return True
 
 def check_password_strength_karel(password, register_status_text):
-    num_uppercase_letters = len(re.findall(r'[A-Z]', password))
-    num_special_characters = len(re.findall(r'[!@#$%^&*(),.?":{}|<>]', password))
-    num_lowercase_letters = len(re.findall(r'[a-z]', password))
-    num_numbers = len(re.findall(r'\d', password))
-
+    num_uppercase_letters = 0
+    num_special_characters = 0
+    num_lowercase_letters = 0
+    num_numbers = 0
+    start_time = time.time()
+    ic(password)
+    
     with open(local_file_name, "r") as file:
         for line in file:
             if password in line:
@@ -104,24 +104,28 @@ def check_password_strength_karel(password, register_status_text):
     for character in password:
         if character.isupper():
             num_uppercase_letters += 1
-        if character.ispunct():
-            num_special_characters += 1
+        for special in character:
+            if special in string.punctuation:
+                num_special_characters += 1
         if character.islower():
             num_lowercase_letters += 1
-        if character.isdigit():
-            num_numbers += 1
+        for digit in character:
+            if digit in string.digits:
+                num_numbers += 1
 
     if not password:
+        end_time = time.time()
+        elapsed_time_ms = (end_time - start_time) * 1000
+        ic(elapsed_time_ms)
         register_status_text.configure(text="Password cannot be empty")
         return True
-    elif (num_uppercase_letters >= 1 and num_special_characters >= 1 and num_lowercase_letters >= 1
-          and num_numbers >= 1 and len(password) >= 12):
+    elif (num_uppercase_letters >= 1 and num_special_characters >= 1 and num_lowercase_letters >= 1 and num_numbers >= 1 and len(password) >= 12):
         register_status_text.configure(text="Password is strong")
         return True
     elif (num_uppercase_letters < 1):
-        register_status_text.configure(text="You don't have 1 or more uppercase letters") 
+        register_status_text.configure(text="You don't have 1 or more uppercase letters")
         return False
-    elif (num_special_characters < 1 ):
+    elif (num_special_characters < 1):
         register_status_text.configure(text="You don't have 1 or more special characters")  
         return False
     elif (num_lowercase_letters < 1):
@@ -131,11 +135,12 @@ def check_password_strength_karel(password, register_status_text):
         register_status_text.configure(text="You don't have 1 or more numbers")  
         return False
     elif (len(password) < 12):
-        register_status_text.configure(text="Your password is less than 12 characters long")
+        register_status_text.configure(text="Your password is less than 12 characters long")    
         return False
     else:
         register_status_text.configure(text="Unexpected error")
         return False
+
 
 if __name__ == "__main__":
     UI = customtkinter.CTk()
@@ -145,6 +150,6 @@ if __name__ == "__main__":
     username_input = customtkinter.CTkEntry(UI, width=300, corner_radius=10)
     status_text.pack(side="top", fill="both", expand=True)
     username_input.pack(side="top", fill="both", expand=True)
-    UI.bind('<Return>', lambda event: check_password_strength_karel(username_input.get(), status_text))
+    UI.bind('<Return>', lambda event: check_password_strength(username_input.get(), status_text))
     UI.mainloop()
 
