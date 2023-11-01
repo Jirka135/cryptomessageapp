@@ -11,9 +11,11 @@ def is_valid_username(username,register_status_text):
     username_list = get_usernames()
     
     if username in username_list:
-        return register_status_text.configure(text=f"User {username} already exist"),False
+        register_status_text.configure(text=f"User {username} already exist") 
+        return False
     elif not username:
-        return register_status_text.configure(text=f"Username, cannot be empty"),False
+        register_status_text.configure(text=f"Username, cannot be empty")
+        return False
     else:
         return True
 
@@ -24,13 +26,16 @@ def is_valid_email(email,register_status_text):
 
 
     if email in email_list:
-        return register_status_text.configure(text=f"Account with Email {email} already exist") and False
+        register_status_text.configure(text=f"Account with Email {email} already exist")
+        return False
     elif not email:
-        return register_status_text.configure(text=f"Email, cannot be empty") and False
+        register_status_text.configure(text=f"Email, cannot be empty") 
+        return False
     elif re.match(email_pattern, email):
         return True
     else:
-        return register_status_text.configure(text=f"this email does not exist") and False
+        register_status_text.configure(text=f"this email does not exist")
+        return False
     
 def download_file(url, file_name):
     response = requests.get(url)
