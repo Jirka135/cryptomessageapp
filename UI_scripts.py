@@ -1,9 +1,8 @@
-import tkinter
 import customtkinter
-import bcrypt
 from db_utils import create_account_in_db,check_login,get_usernames,get_emails
 from other_utils import check_password_strength,is_valid_email,is_valid_username
 from icecream import ic
+import tkinter as tk
 
 def title(UI_main):
     title_text = customtkinter.CTkLabel(UI_main, text="CryptoMessage", anchor="center", font=("Arial", 30), pady=40)
@@ -99,7 +98,6 @@ def login_page(UI_main):
     password_input = customtkinter.CTkEntry(main_UI_frame, width=300, corner_radius=10, show="*")
     login_status_text = customtkinter.CTkLabel(main_UI_frame, text="")
 
-
     username_text.grid(row=0, column=0, padx=5, pady=5)
     password_text.grid(row=1, column=0, padx=5, pady=5)
     username_input.grid(row=0, column=1, padx=5, pady=5)
@@ -113,5 +111,25 @@ def login_page(UI_main):
 
     register_button = customtkinter.CTkButton(UI_main, text="Create Account", command= lambda : register_page(UI_main))
     register_button.pack(padx=20, pady=10,side="bottom",anchor="sw")
+
+def user_profile():
+    print("cs")
+def main_page(UI_main):
+    clear_ui(UI_main)
+
+    title_text = customtkinter.CTkLabel(UI_main, text="CryptoMessage", font=("Arial", 30), pady=20)
+    title_text.grid(row=0, column=0,sticky="w",padx=20)
+
+    user_icon = customtkinter.CTkButton(UI_main, text="P", width=40, height=40, cursor="hand2", command=user_profile)
+    user_icon.grid(row=0, column=1,padx=20, sticky="e")
+
+    main_UI_frame = customtkinter.CTkFrame(UI_main)
+    main_UI_frame.grid(row=1, column=0, columnspan=2, padx=20, pady=0, sticky="nsew")
+
+    # Configure grid row and column weights to make the main_UI_frame expand
+    UI_main.grid_rowconfigure(1, weight=1)
+    UI_main.grid_columnconfigure(0, weight=1)
+    UI_main.grid_columnconfigure(1, weight=1)
+
 
 

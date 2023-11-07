@@ -4,6 +4,7 @@ import UI_scripts
 from db_utils import delete_account,get_usernames
 from icecream import ic
 
+
 # UI
 
 def main_loop():
@@ -14,7 +15,8 @@ def main_loop():
     UI_main.geometry("520x720")
     UI_main.title("CryptoMessage")
 
-    UI_scripts.register_page(UI_main)
+    UI_scripts.main_page(UI_main)
+    #UI_scripts.register_page(UI_main)
 
     UI_main.mainloop()
     session.close()
@@ -22,4 +24,4 @@ def main_loop():
 
 
 if __name__ == "__main__":
-    main_loop()
+    main_loop() 

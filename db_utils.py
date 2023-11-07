@@ -24,7 +24,6 @@ def check_login(username,password,login_status_text):
         if password_hash_input == password_hash_from_db:
             ic("login successful")
             login_status_text.configure(text="")
-            #prihaseni clienta
         else:
             ic("login failed, wrong password")
             #password_status_value = "wrong password"
