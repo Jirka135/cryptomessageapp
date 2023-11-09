@@ -104,10 +104,10 @@ def login_page(UI_main):
     password_input.grid(row=1, column=1, padx=5, pady=5)
     login_status_text.grid(row=2, column=0, columnspan=2, padx=5, pady=5, sticky="nsew")
 
-    login_button = customtkinter.CTkButton(main_UI_frame, text="login", command= lambda: check_login(username_input.get(), password_input.get(),login_status_text))
+    login_button = customtkinter.CTkButton(main_UI_frame, text="login", command= lambda: main_page(UI_main) if check_login(username_input.get(), password_input.get(),login_status_text) else None)
     login_button.grid(row=3, columnspan=2, padx=5, pady=10)
 
-    UI_main.bind('<Return>', lambda event: check_login())
+    UI_main.bind('<Return>', lambda event: check_login(username_input.get(), password_input.get(),login_status_text))
 
     register_button = customtkinter.CTkButton(UI_main, text="Create Account", command= lambda : register_page(UI_main))
     register_button.pack(padx=20, pady=10,side="bottom",anchor="sw")
