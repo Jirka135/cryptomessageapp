@@ -2,7 +2,10 @@ import customtkinter
 from db_utils import create_account_in_db,check_login,get_usernames,get_emails
 from other_utils import check_password_strength,is_valid_email,is_valid_username
 from icecream import ic
+from datetime import datetime
 import tkinter as tk
+from tkinter import ttk
+from tkcalendar import DateEntry,Calendar
 
 def title(UI_main):
     title_text = customtkinter.CTkLabel(UI_main, text="CryptoMessage", anchor="center", font=("Arial", 30), pady=40)
@@ -112,15 +115,50 @@ def login_page(UI_main):
     register_button = customtkinter.CTkButton(UI_main, text="Create Account", command= lambda : register_page(UI_main))
     register_button.pack(padx=20, pady=10,side="bottom",anchor="sw")
 
-def user_profile():
-    print("cs")
+def edit_profile(UI_main):
+    ...
+
+def user_profile(UI_main):
+    clear_ui(UI_main)
+    today = datetime.now()
+    
+    title_text = customtkinter.CTkLabel(UI_main, text="Profile Editor", font=("Arial", 30), pady=20)
+    title_text.grid(row=0, column=0,sticky="w",padx=20)
+
+    user_icon = customtkinter.CTkButton(UI_main, text="P", width=40, height=40, cursor="hand2", command=edit_profile(UI_main))
+    user_icon.grid(row=0, column=1,padx=20, sticky="e")
+
+    main_UI_frame = customtkinter.CTkFrame(UI_main)
+    main_UI_frame.grid(row=1, column=0, columnspan=2, padx=20, pady=0, sticky="nsew")
+
+    gender_text = customtkinter.CTkLabel(main_UI_frame, text="Gender:")
+    gender_dropdown = customtkinter.CTkComboBox(main_UI_frame, values=["Male", "Female", "Other"])
+    b_day_text = customtkinter.CTkLabel(main_UI_frame, text="Birth Date:")
+    b_day_text_pick = DateEntry(main_UI_frame, selectmode='day',cursor="hand2")
+    b_day_text_pick.set_date(today)
+    age_text =  customtkinter.CTkLabel(main_UI_frame, text="Gender:")
+    bio_text = customtkinter.CTkLabel(main_UI_frame, text="Gender:")
+
+
+    gender_text.grid(row=1, column=0,padx=20,pady=20)
+    gender_dropdown.grid(row=1, column=1,padx=20,pady=20)
+    b_day_text.grid(row=2, column=0)
+    b_day_text_pick.grid(row=2, column=1,padx=20,pady=20)
+    age_text.grid(row=3, column=0)
+    bio_text.grid(row=4, column=0)
+
+    # Configure grid row and column weights to make the main_UI_frame expand
+    UI_main.grid_rowconfigure(1, weight=1)
+    UI_main.grid_columnconfigure(0, weight=1)
+    UI_main.grid_columnconfigure(1, weight=1)
+
 def main_page(UI_main):
     clear_ui(UI_main)
 
     title_text = customtkinter.CTkLabel(UI_main, text="CryptoMessage", font=("Arial", 30), pady=20)
     title_text.grid(row=0, column=0,sticky="w",padx=20)
 
-    user_icon = customtkinter.CTkButton(UI_main, text="P", width=40, height=40, cursor="hand2", command=user_profile)
+    user_icon = customtkinter.CTkButton(UI_main, text="P", width=40, height=40, cursor="hand2", command=user_profile(UI_main))
     user_icon.grid(row=0, column=1,padx=20, sticky="e")
 
     main_UI_frame = customtkinter.CTkFrame(UI_main)

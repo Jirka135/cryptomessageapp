@@ -1,4 +1,4 @@
-from my_sqlalchemy import session,User
+from my_sqlalchemy import session,User,session2
 import bcrypt
 from icecream import ic
 from create_salt import generate_salt

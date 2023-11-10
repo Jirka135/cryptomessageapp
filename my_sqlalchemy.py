@@ -12,7 +12,7 @@ Base2 = declarative_base()
 # Define a sample table
 
 class Profile_table(Base2):
-    __tablename__ = 'first_table'
+    __tablename__ = 'user_info'
 
     id = Column(Integer, primary_key=True)
     gender = Column(String)

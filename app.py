@@ -15,8 +15,8 @@ def main_loop():
     UI_main.geometry("520x720")
     UI_main.title("CryptoMessage")
 
-    #UI_scripts.main_page(UI_main)
-    UI_scripts.register_page(UI_main)
+    UI_scripts.user_profile(UI_main)
+    #UI_scripts.register_page(UI_main)
 
     UI_main.mainloop()
     session.close()
