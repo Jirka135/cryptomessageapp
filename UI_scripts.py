@@ -136,18 +136,16 @@ def user_profile(UI_main):
     b_day_text = customtkinter.CTkLabel(main_UI_frame, text="Birth Date:")
     b_day_text_pick = DateEntry(main_UI_frame, selectmode='day',cursor="hand2")
     b_day_text_pick.set_date(today)
-    age_text =  customtkinter.CTkLabel(main_UI_frame, text="Gender:")
-    bio_text = customtkinter.CTkLabel(main_UI_frame, text="Gender:")
-
+    bio_text =  customtkinter.CTkLabel(main_UI_frame, text="Bio text:")
+    bio_input = customtkinter.CTkTextbox(main_UI_frame,height=80)
 
     gender_text.grid(row=1, column=0,padx=20,pady=20)
-    gender_dropdown.grid(row=1, column=1,padx=20,pady=20)
+    gender_dropdown.grid(row=1, column=1,padx=20,pady=20,sticky="w")
     b_day_text.grid(row=2, column=0)
-    b_day_text_pick.grid(row=2, column=1,padx=20,pady=20)
-    age_text.grid(row=3, column=0)
-    bio_text.grid(row=4, column=0)
-
-    # Configure grid row and column weights to make the main_UI_frame expand
+    b_day_text_pick.grid(row=2, column=1,padx=20,pady=20,sticky="w")
+    bio_text.grid(row=3, column=0)
+    bio_input.grid(row=3, column=1, padx=20, pady=20,sticky="nsew")
+    
     UI_main.grid_rowconfigure(1, weight=1)
     UI_main.grid_columnconfigure(0, weight=1)
     UI_main.grid_columnconfigure(1, weight=1)
